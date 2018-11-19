@@ -1,0 +1,10 @@
+# Jetbrains
+.idea
+
+# Scala
+target
+
+# Generated assets
+node_modules
+src/main/resources/public/styles
+src/main/resources/public/scripts
