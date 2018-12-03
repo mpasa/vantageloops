@@ -15,7 +15,7 @@ val AKKA_SERIAL_VERSION = "4.1.2"
 lazy val projectDependencies = Seq(
   // Serial
   "ch.jodersky" %% "akka-serial-core" % AKKA_SERIAL_VERSION,
-  "ch.jodersky" % "akka-serial-native" % AKKA_SERIAL_VERSION % "runtime",
+  "ch.jodersky" % "akka-serial-native" % AKKA_SERIAL_VERSION,
   "ch.jodersky" %% "akka-serial-stream" % AKKA_SERIAL_VERSION,
   // Unit conversion
   "org.typelevel"  %% "squants"  % "1.4.0",
