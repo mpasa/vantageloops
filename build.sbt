@@ -7,10 +7,10 @@ lazy val projectSettings = Seq(
   name := "vantageloops",
   version := "0.1.0",
   organization := "me.mpasa",
-  scalaVersion := "2.12.7"
+  scalaVersion := "2.12.8"
 )
 
-val AKKA_SERIAL_VERSION = "4.1.2"
+val AKKA_SERIAL_VERSION = "4.1.4"
 
 lazy val projectDependencies = Seq(
   // Serial
