@@ -9,16 +9,16 @@ import squants.space.Inches
 import squants.thermal.Fahrenheit
 
 final case class Loop(
-  barometer: Double,
-  inTemperature: Double,
-  outTemperature: Double,
-  windSpeed: Double,
-  windDirection: Short,    // 0 => No data, 360 => North, 90 => East, 180 => South, 270 => West
-  inHumidity: Byte,
-  outHumidity: Byte,
-  dayRain: Double,
-  rainRate: Double,
-  forecast: Byte
+    barometer: Double,
+    inTemperature: Double,
+    outTemperature: Double,
+    windSpeed: Double,
+    windDirection: Short, // 0 => No data, 360 => North, 90 => East, 180 => South, 270 => West
+    inHumidity: Byte,
+    outHumidity: Byte,
+    dayRain: Double,
+    rainRate: Double,
+    forecast: Byte
 ) {
 
   override def toString: String = {
@@ -34,8 +34,8 @@ final case class Loop(
       "Rain rate" -> rainRate,
       "Forecast" -> forecast
     )
-    .map { case (key, value) => s"$key: $value" }
-    .mkString("\n")
+      .map { case (key, value) => s"$key: $value" }
+      .mkString("\n")
   }
 }
 
@@ -48,7 +48,9 @@ object Loop {
 
   private def isLoop(buffer: ByteBuffer): Boolean = {
     val asString = new String(buffer.array(), Charset.forName("UTF-8"))
-    isFirstLoop(buffer) || asString.length == 99 && asString.slice(0, 4).trim == "LOO"
+    isFirstLoop(buffer) || asString.length == 99 && asString
+      .slice(0, 4)
+      .trim == "LOO"
   }
 
   // Protocol: http://www.davisnet.com/support/weather/download/VantageSerialProtocolDocs_v261.pdf
@@ -60,10 +62,16 @@ object Loop {
 
     if (isLoop(buffer)) {
       val m = if (isFirstLoop(buffer)) 1 else 0
-      val barometer = MillimetersOfMercury(Inches(buffer.getShort(7 + m).toDouble / 1000).toMillimeters).toPascals / 100
-      val inTemperature = Fahrenheit(buffer.getShort(9 + m).toDouble / 10).toCelsiusScale
+      val barometer = MillimetersOfMercury(
+        Inches(buffer.getShort(7 + m).toDouble / 1000).toMillimeters
+      ).toPascals / 100
+      val inTemperature = Fahrenheit(
+        buffer.getShort(9 + m).toDouble / 10
+      ).toCelsiusScale
       val inHumidity = buffer.get(11 + m)
-      val outTemperature = Fahrenheit(buffer.getShort(12 + m).toDouble / 10).toCelsiusScale
+      val outTemperature = Fahrenheit(
+        buffer.getShort(12 + m).toDouble / 10
+      ).toCelsiusScale
       val windSpeed = UsMilesPerHour(buffer.get(14 + m)).toKilometersPerHour
       val windDirection = buffer.getShort(16 + m)
       val outHumidity = buffer.get(33 + m)
@@ -72,7 +80,18 @@ object Loop {
       val forecast = buffer.get(89 + m)
 
       // CRC is written in big endian order
-      val loop = Loop(barometer, inTemperature, outTemperature, windSpeed, windDirection, inHumidity, outHumidity, dayRain, rainRate, forecast)
+      val loop = Loop(
+        barometer,
+        inTemperature,
+        outTemperature,
+        windSpeed,
+        windDirection,
+        inHumidity,
+        outHumidity,
+        dayRain,
+        rainRate,
+        forecast
+      )
       val crc: Array[Byte] = Array(buffer.get(97 + m), buffer.get(98 + m))
       val calculatedCrc = CRC16.calculate(arrayBuffer.slice(0 + m, 97 + m))
       if (crc.deep == calculatedCrc.bytesCrc.deep) {
@@ -85,3 +104,4 @@ object Loop {
     }
   }
 }
+

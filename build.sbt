@@ -7,7 +7,7 @@ lazy val projectSettings = Seq(
   name := "vantageloops",
   version := "0.1.0",
   organization := "me.mpasa",
-  scalaVersion := "2.12.8"
+  scalaVersion := "2.12.20"
 )
 
 val AKKA_SERIAL_VERSION = "4.1.4"
@@ -18,9 +18,9 @@ lazy val projectDependencies = Seq(
   "ch.jodersky" % "akka-serial-native" % AKKA_SERIAL_VERSION,
   "ch.jodersky" %% "akka-serial-stream" % AKKA_SERIAL_VERSION,
   // Unit conversion
-  "org.typelevel"  %% "squants"  % "1.4.0",
+  "org.typelevel"  %% "squants"  % "1.8.3",
   // Scheduling
-  "io.monix" %% "monix" % "3.0.0-RC1"
+  "io.monix" %% "monix" % "3.4.1"
 )
 
 // https://tpolecat.github.io/2017/04/25/scalac-flags.html

@@ -1,8 +1,9 @@
 # vantageloops
+
 **vantageloops** is a dead simple Davis Vantage driver implemented in Scala.
 
-
 ## How to use
+
 ```scala
 val system: ActorSystem = ActorSystem("AS")
 
