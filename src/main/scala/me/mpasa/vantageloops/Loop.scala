@@ -18,6 +18,7 @@ final case class Loop(
     outHumidity: Byte,
     dayRain: Double,
     rainRate: Double,
+    transmitterBatteryStatus: Int,
     forecast: Byte
 ) {
 
@@ -32,6 +33,7 @@ final case class Loop(
       "Out humidity" -> outHumidity,
       "Day rain" -> dayRain,
       "Rain rate" -> rainRate,
+      "Transmitter battery status" -> transmitterBatteryStatus,
       "Forecast" -> forecast
     )
       .map { case (key, value) => s"$key: $value" }
@@ -77,6 +79,7 @@ object Loop {
       val outHumidity = buffer.get(33 + m)
       val rainRate = buffer.getShort(41 + m) * 0.2
       val dayRain = buffer.getShort(50 + m) * 0.2
+      val transmitterBatteryStatus = buffer.get(86 + m) & 0xff
       val forecast = buffer.get(89 + m)
 
       // CRC is written in big endian order
@@ -90,6 +93,7 @@ object Loop {
         outHumidity,
         dayRain,
         rainRate,
+        transmitterBatteryStatus,
         forecast
       )
       val crc: Array[Byte] = Array(buffer.get(97 + m), buffer.get(98 + m))
@@ -104,4 +108,3 @@ object Loop {
     }
   }
 }
-
