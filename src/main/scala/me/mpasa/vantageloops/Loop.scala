@@ -98,7 +98,7 @@ object Loop {
       )
       val crc: Array[Byte] = Array(buffer.get(97 + m), buffer.get(98 + m))
       val calculatedCrc = CRC16.calculate(arrayBuffer.slice(0 + m, 97 + m))
-      if (crc.deep == calculatedCrc.bytesCrc.deep) {
+      if (java.util.Arrays.equals(crc, calculatedCrc.bytesCrc)) {
         Right(loop)
       } else {
         Left(InvalidCrc)
