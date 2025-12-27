@@ -43,16 +43,24 @@ final case class Loop(
 
 object Loop {
 
+  private def startsWithLOO(buffer: ByteBuffer, off: Int): Boolean = {
+    val p = buffer.position()
+    buffer.remaining() >= off + 3 &&
+    buffer.get(p + off) == 'L'.toByte &&
+    buffer.get(p + off + 1) == 'O'.toByte &&
+    buffer.get(p + off + 2) == 'O'.toByte
+  }
+
   private def isFirstLoop(buffer: ByteBuffer): Boolean = {
-    val asString = new String(buffer.array(), Charset.forName("UTF-8"))
-    asString.length == 100 && asString.slice(0, 4).trim == "LOO"
+    // "first loop" means 100 bytes total and "LOO" starts at offset 1
+    buffer.remaining() == 100 && startsWithLOO(buffer, off = 1)
   }
 
   private def isLoop(buffer: ByteBuffer): Boolean = {
-    val asString = new String(buffer.array(), Charset.forName("UTF-8"))
-    isFirstLoop(buffer) || asString.length == 99 && asString
-      .slice(0, 4)
-      .trim == "LOO"
+    // normal: 99 bytes and "LOO" at offset 0
+    // first:  100 bytes and "LOO" at offset 1
+    (buffer.remaining() == 99 && startsWithLOO(buffer, off = 0)) ||
+    isFirstLoop(buffer)
   }
 
   // Protocol: http://www.davisnet.com/support/weather/download/VantageSerialProtocolDocs_v261.pdf

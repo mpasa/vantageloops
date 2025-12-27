@@ -4,7 +4,7 @@ lazy val root = (project in file("."))
 
 lazy val projectSettings = Seq(
   name := "vantageloops",
-  version := "0.1.1",
+  version := "0.1.2",
   organization := "me.mpasa",
   scalaVersion := "2.13.18"
 )
